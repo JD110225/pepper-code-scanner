@@ -59,11 +59,23 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == BARCODE_READER_ACTIVITY_REQUEST && data != null) {
             val barcode: Barcode? =
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
-            val message = "Scan result: ${barcode?.rawValue}"
+            var articulo= barcode?.rawValue
+            var precio=nameToPrice(articulo)
+            //val message = "Scan result: ${barcode?.rawValue}"
+            val message = "Debes pagar "+precio+" por el articulo "+articulo
 
             val launchIntent = Intent(this, ResultActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
+    }
+    fun nameToPrice(productName:String?): Int{
+        var price:Int=-1;
+        when(productName){
+            "grande"->price=1000;
+            "mediano"->price=100;
+            "pequeno"->price=10;
+        }
+        return price;
     }
 }
