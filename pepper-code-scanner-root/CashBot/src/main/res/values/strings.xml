@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Code Scanner Sample Application (Intent)</string>
     <string name="instructions">Touch my screen to start scanning</string>
+    <string name="cancel">CANCEL</string>
+    <string name="scan">SCAN</string>
+    <string name="cash_bot">CASH BOT</string>
+    <string name="qr_scanner">QR Scanner</string>
 </resources>

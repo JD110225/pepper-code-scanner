@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
-
+    private val total = 0
     companion object {
         private const val TAG = "MainActivity"
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainLayout.setOnClickListener {
+        mainLayout.scanButton.setOnClickListener {
             val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
             // Uncomment the next line to remove the scanner overlay
             //launchIntent.putExtra(KEY_SCAN_OVERLAY_VISIBILITY, false)
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             //val message = "Scan result: ${barcode?.rawValue}"
             val message = "Debes pagar "+precio+" por el articulo "+articulo
 
-            val launchIntent = Intent(this, ResultActivity::class.java)
+            val launchIntent = Intent(this, MainActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
@@ -72,9 +73,9 @@ class MainActivity : AppCompatActivity() {
     fun nameToPrice(productName:String?): Int{
         var price:Int=-1;
         when(productName){
-            "grande"->price=1000;
-            "mediano"->price=100;
-            "pequeno"->price=10;
+            "Grande"->price=1000;
+            "Mediano"->price=100;
+            "Pequeno"->price=10;
         }
         return price;
     }
