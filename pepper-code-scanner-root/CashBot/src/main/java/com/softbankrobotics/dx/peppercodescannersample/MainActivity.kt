@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
             var precio=nameToPrice(articulo)
             //val message = "Scan result: ${barcode?.rawValue}"
             val message = "Debes pagar "+precio+" por el articulo "+articulo
-
-            val launchIntent = Intent(this, MainActivity::class.java)
+            val launchIntent = Intent(this, ResultActivity::class.java)
+            //val launchIntent = Intent(this, MainActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
