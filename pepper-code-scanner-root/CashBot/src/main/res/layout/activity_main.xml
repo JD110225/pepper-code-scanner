@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/tx"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,11 +20,11 @@
         app:srcCompat="@drawable/cb" />
 
     <Button
-        android:id="@+id/cancelButton2"
-        android:layout_width="213dp"
-        android:layout_height="76dp"
-        android:layout_marginTop="360dp"
-        android:layout_marginEnd="24dp"
+        android:id="@+id/cancelButton"
+        android:layout_width="192dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="376dp"
+        android:layout_marginEnd="4dp"
         android:background="#F44336"
         android:text="@string/cancel"
         android:textColor="#EEF1F6"
@@ -36,10 +35,10 @@
 
     <Button
         android:id="@+id/scanButton"
-        android:layout_width="213dp"
-        android:layout_height="76dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="360dp"
+        android:layout_width="191dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="376dp"
         android:background="#4CAF50"
         android:text="@string/scan"
         android:textColor="#EEF1F6"
@@ -48,20 +47,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
-    <EditText
-        android:id="@+id/tx"
-        android:layout_width="263dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="456dp"
-        android:layout_marginEnd="12dp"
-        android:ems="10"
-        android:inputType="textPersonName"
+    <TextView
+        android:id="@+id/contador"
+        android:layout_width="133dp"
+        android:layout_height="73dp"
         android:text="0"
-        android:textAlignment="center"
-        android:textSize="50sp"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintHorizontal_bias="0.057"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

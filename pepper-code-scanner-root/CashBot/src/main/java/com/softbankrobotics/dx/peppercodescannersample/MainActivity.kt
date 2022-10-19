@@ -12,8 +12,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
-    private val total = 0
+
     companion object {
+        private var total=0
         private const val TAG = "MainActivity"
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private const val KEY_MESSAGE = "key_message"
@@ -22,12 +23,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        mainLayout.contador.setText(""+total)
         mainLayout.scanButton.setOnClickListener {
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            // Uncomment the next line to remove the scanner overlay
-            //launchIntent.putExtra(KEY_SCAN_OVERLAY_VISIBILITY, false)
-            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+            //val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            total+=500
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
+            //startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+        }
+
+        mainLayout.cancelButton.setOnClickListener{
+            total=0
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
         }
     }
 
@@ -62,10 +70,9 @@ class MainActivity : AppCompatActivity() {
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
             var articulo= barcode?.rawValue
             var precio=nameToPrice(articulo)
-            //val message = "Scan result: ${barcode?.rawValue}"
+            total+=precio;
             val message = "Debes pagar "+precio+" por el articulo "+articulo
-            val launchIntent = Intent(this, ResultActivity::class.java)
-            //val launchIntent = Intent(this, MainActivity::class.java)
+            val launchIntent = Intent(this, MainActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
