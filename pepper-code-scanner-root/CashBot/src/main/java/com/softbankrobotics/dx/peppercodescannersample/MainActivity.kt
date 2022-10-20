@@ -25,11 +25,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mainLayout.contador.setText(""+total)
         mainLayout.scanButton.setOnClickListener {
-            //val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            total+=500
-            val launchIntent = Intent(this, MainActivity::class.java)
-            startActivity(launchIntent)
-            //startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            //val launchIntent = Intent(this, MainActivity::class.java)
+            //startActivity(launchIntent)
+            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
         }
 
         mainLayout.cancelButton.setOnClickListener{
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             var precio=nameToPrice(articulo)
             total+=precio;
             val message = "Debes pagar "+precio+" por el articulo "+articulo
-            val launchIntent = Intent(this, MainActivity::class.java)
+            val launchIntent = Intent(this, ResultActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
