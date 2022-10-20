@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             var precio=nameToPrice(articulo)
             total+=precio;
             val message = "Debes pagar "+precio+" por el articulo "+articulo
-            val launchIntent = Intent(this, ResultActivity::class.java)
+            val launchIntent = Intent(this, MainActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
