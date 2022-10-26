@@ -7,14 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/payButton"
+        android:layout_width="191dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="480dp"
+        android:background="#4CAF50"
+        android:text="Pay"
+        android:textColor="#EEF1F6"
+        android:textSize="34sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cb" />
@@ -39,7 +52,7 @@
         android:layout_height="52dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="376dp"
-        android:background="#4CAF50"
+        android:background="#2196F3"
         android:text="@string/scan"
         android:textColor="#EEF1F6"
         android:textSize="34sp"

@@ -1,24 +1,35 @@
 package com.softbankrobotics.dx.peppercodescannersample
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.vision.barcode.Barcode
+import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
+import kotlinx.android.synthetic.main.activity_result.view.*
 
 class ResultActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_MESSAGE = "key_message"
-        private const val RESTART_TIME = 5000L
+        private const val RESTART_TIME = 10000L
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
-
         val message = intent.getStringExtra(KEY_MESSAGE)
         textViewResult.text = message
+        resultLayout.backButton.setOnClickListener{
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
+        }
+        resultLayout.confirmPayButton.setOnClickListener{
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            startActivity(launchIntent)
+        }
     }
 
     override fun onStart() {

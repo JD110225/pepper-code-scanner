@@ -36,6 +36,14 @@ class MainActivity : AppCompatActivity() {
             val launchIntent = Intent(this, MainActivity::class.java)
             startActivity(launchIntent)
         }
+
+        mainLayout.payButton.setOnClickListener{
+            total+=500;
+            val message = "Tu precio a pagar es: "+total
+            val launchIntent = Intent(this, ResultActivity::class.java)
+            launchIntent.putExtra(KEY_MESSAGE, message)
+            startActivity(launchIntent)
+        }
     }
 
     override fun onStart() {
@@ -70,9 +78,7 @@ class MainActivity : AppCompatActivity() {
             var articulo= barcode?.rawValue
             var precio=nameToPrice(articulo)
             total+=precio;
-            val message = "Debes pagar "+precio+" por el articulo "+articulo
             val launchIntent = Intent(this, MainActivity::class.java)
-            launchIntent.putExtra(KEY_MESSAGE, message)
             startActivity(launchIntent)
         }
     }
