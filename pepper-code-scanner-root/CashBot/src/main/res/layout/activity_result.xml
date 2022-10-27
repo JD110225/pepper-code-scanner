@@ -17,18 +17,18 @@
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.345"
+        app:layout_constraintHorizontal_bias="0.357"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.623"
+        app:layout_constraintVertical_bias="0.616"
         tools:ignore="TextContrastCheck" />
 
     <Button
         android:id="@+id/confirmPayButton"
         android:layout_width="148dp"
         android:layout_height="56dp"
-        android:layout_marginStart="516dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginStart="528dp"
+        android:layout_marginTop="336dp"
         android:background="#4CAF50"
         android:text="Pay"
         android:textColor="#EEF1F6"
@@ -48,7 +48,6 @@
         app:fontFamily="@font/din_regular_webfont"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

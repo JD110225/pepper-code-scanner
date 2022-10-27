@@ -12,7 +12,7 @@ import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_result.view.*
 
-class ResultActivity : AppCompatActivity() {
+class TransactionActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY_MESSAGE = "key_message"
@@ -23,17 +23,10 @@ class ResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
-        val message = intent.getStringExtra(KEY_MESSAGE)
+        setContentView(R.layout.transaccion)
+        val precioEscaneado = intent.getStringExtra(KEY_MESSAGE)
+        var message = "El monto escaneado es :"+precioEscaneado
         textViewResult.text = message
-        resultLayout.backButton.setOnClickListener{
-            val launchIntent = Intent(this, MainActivity::class.java)
-            startActivity(launchIntent)
-        }
-        resultLayout.confirmPayButton.setOnClickListener{
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
-        }
     }
 
     override fun onStart() {
@@ -59,7 +52,6 @@ class ResultActivity : AppCompatActivity() {
             var scannedPrice= barcode?.rawValue
             Log.d("Precio escaneado",scannedPrice)
             val launchIntent = Intent(this, TransactionActivity::class.java)
-            launchIntent.putExtra(KEY_MESSAGE, scannedPrice)
             startActivity(launchIntent)
         }
     }

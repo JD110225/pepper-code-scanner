@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainLayout.payButton.setOnClickListener{
-            total+=500;
             val message = "Tu precio a pagar es: "+total
             val launchIntent = Intent(this, ResultActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
