@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_result.view.*
 class ResultActivity : AppCompatActivity() {
 
     companion object {
+        private var totalPagar = ""
         private const val KEY_MESSAGE = "key_message"
         private const val TAG = "ResultActivity"
         private const val RESTART_TIME = 10000L
@@ -25,7 +26,10 @@ class ResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
         val message = intent.getStringExtra(KEY_MESSAGE)
-        textViewResult.text = message
+        totalPagar=message
+       // val price = intent.getStringExtra(TOTAL_PRICE)
+       // Log.d("Precio desde result",price)
+        textViewResult.text = "Tu precio a pagar es: "+message
         resultLayout.backButton.setOnClickListener{
             val launchIntent = Intent(this, MainActivity::class.java)
             startActivity(launchIntent)
@@ -58,6 +62,8 @@ class ResultActivity : AppCompatActivity() {
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
             var scannedPrice= barcode?.rawValue
             Log.d("Precio escaneado",scannedPrice)
+            var vuelto = scannedPrice-(totalPagar.toInt())
+            Log.d("Vuelto a pagar: "+ vuelto))
             val launchIntent = Intent(this, TransactionActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, scannedPrice)
             startActivity(launchIntent)
