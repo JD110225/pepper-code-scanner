@@ -14,11 +14,10 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private var total=0
+        private var total=500
         private const val TAG = "MainActivity"
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private const val KEY_MESSAGE = "key_message"
-        private const val TOTAL_PRICE = "total_price"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +38,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainLayout.payButton.setOnClickListener{
-            val message = total
+            val message = ""+total
             val launchIntent = Intent(this, ResultActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, message)
-            //launchIntent.putExtra(TOTAL_PRICE, total)
             startActivity(launchIntent)
         }
     }

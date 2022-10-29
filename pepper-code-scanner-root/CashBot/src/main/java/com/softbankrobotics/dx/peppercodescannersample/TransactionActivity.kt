@@ -24,9 +24,8 @@ class TransactionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.transaccion)
-        val precioEscaneado = intent.getStringExtra(KEY_MESSAGE)
-        var message = "El monto escaneado es :"+precioEscaneado
-        textViewResult.text = message
+        val mensajeVuelto = intent.getStringExtra(KEY_MESSAGE)
+        textViewResult.text = mensajeVuelto
     }
 
     override fun onStart() {

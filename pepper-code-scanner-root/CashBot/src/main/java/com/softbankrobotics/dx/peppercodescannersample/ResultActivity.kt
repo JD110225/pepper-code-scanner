@@ -11,24 +11,23 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_result.view.*
+import java.lang.Math.abs
 
 class ResultActivity : AppCompatActivity() {
 
     companion object {
-        private var totalPagar = ""
         private const val KEY_MESSAGE = "key_message"
         private const val TAG = "ResultActivity"
         private const val RESTART_TIME = 10000L
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
+        private var precioPagar:Int = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
         val message = intent.getStringExtra(KEY_MESSAGE)
-        totalPagar=message
-       // val price = intent.getStringExtra(TOTAL_PRICE)
-       // Log.d("Precio desde result",price)
+        precioPagar = message.toInt()
         textViewResult.text = "Tu precio a pagar es: "+message
         resultLayout.backButton.setOnClickListener{
             val launchIntent = Intent(this, MainActivity::class.java)
@@ -37,6 +36,13 @@ class ResultActivity : AppCompatActivity() {
         resultLayout.confirmPayButton.setOnClickListener{
             val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
             startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+
+           // var scannedPrice= "2000"
+           // Log.d("Precio escaneado",scannedPrice)
+          //  var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar)
+          //  val launchIntent = Intent(this, TransactionActivity::class.java)
+           // launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
+          //  startActivity(launchIntent)
         }
     }
 
@@ -62,12 +68,24 @@ class ResultActivity : AppCompatActivity() {
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
             var scannedPrice= barcode?.rawValue
             Log.d("Precio escaneado",scannedPrice)
-            var vuelto = scannedPrice-(totalPagar.toInt())
-            Log.d("Vuelto a pagar: "+ vuelto))
+            var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar)
             val launchIntent = Intent(this, TransactionActivity::class.java)
-            launchIntent.putExtra(KEY_MESSAGE, scannedPrice)
+            launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
             startActivity(launchIntent)
         }
+    }
+    fun generarMensajeVuelto(vuelto:Int):String{
+        var mensaje:String;
+        if(vuelto>0){
+            mensaje="Tu vuelto corresponde a: "+vuelto;
+        }
+        else if(vuelto==0){
+            mensaje="Gracias por pagar exacto!";
+        }
+        else{
+            mensaje = "Aún debes pagar "+ abs(vuelto)
+        }
+        return mensaje;
     }
 
     private fun hideSystemUI() {
