@@ -1,2 +1,2 @@
-include 'CashBot', ':pepper-code-scanner', ':sample-app-with-fragment'
+include 'CashBot', ':pepper-code-scanner', ':sample-app-with-fragment' , ':app'
 rootProject.name='CashBot'
