@@ -5,10 +5,10 @@
     tools:ignore="GoogleAppIndexingWarning">
 
     <application
+        tools:replace="android:icon"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/cash_bot"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

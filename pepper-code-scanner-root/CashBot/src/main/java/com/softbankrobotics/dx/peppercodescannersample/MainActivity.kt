@@ -10,7 +10,7 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
-
+import com.softbankrobotics.qisdktutorials.ui.tutorials.gettingstarted.HelloHumanTutorialActivity;
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -25,10 +25,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mainLayout.contador.setText(""+total)
         mainLayout.scanButton.setOnClickListener {
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            //val launchIntent = Intent(this, MainActivity::class.java)
-            //startActivity(launchIntent)
-            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+            val launchIntent2 = Intent(this, HelloHumanTutorialActivity::class.java)
+            startActivity(launchIntent2)
+
+//            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+//            //val launchIntent = Intent(this, MainActivity::class.java)
+//            //startActivity(launchIntent)
+//            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
         }
 
         mainLayout.cancelButton.setOnClickListener{

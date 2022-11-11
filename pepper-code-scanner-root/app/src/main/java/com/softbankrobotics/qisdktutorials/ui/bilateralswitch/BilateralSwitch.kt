@@ -20,13 +20,13 @@ import android.widget.FrameLayout
 import com.softbankrobotics.qisdktutorials.R
 import kotlinx.android.synthetic.main.bilateral_switch.view.*
 
-private const val BACKGROUND_FIRST_SECTION_COLOR = R.color.basic_green
-private const val BACKGROUND_SECOND_SECTION_COLOR = R.color.advanced_orange
+private const val BACKGROUND_FIRST_SECTION_COLOR = 255
+private const val BACKGROUND_SECOND_SECTION_COLOR = 345
 
 private const val TRANSITION_DURATION = 100
 
-private const val FIRST_SECTION_TEXT = R.string.basic_level
-private const val SECOND_SECTION_TEXT = R.string.advanced_level
+private const val FIRST_SECTION_TEXT = 1
+private const val SECOND_SECTION_TEXT = 2
 
 class BilateralSwitch (context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : FrameLayout(context, attrs, defStyleAttr), View.OnClickListener {
 
