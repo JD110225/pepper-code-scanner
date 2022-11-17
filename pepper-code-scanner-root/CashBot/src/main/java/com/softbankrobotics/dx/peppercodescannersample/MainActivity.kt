@@ -6,32 +6,46 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.aldebaran.qi.sdk.QiContext
+import com.aldebaran.qi.sdk.QiSDK
+import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
+import com.aldebaran.qi.sdk.`object`.conversation.Chat
+import com.aldebaran.qi.sdk.`object`.conversation.QiChatbot
+import com.aldebaran.qi.sdk.`object`.conversation.Say
+import com.aldebaran.qi.sdk.`object`.locale.Language
+import com.aldebaran.qi.sdk.`object`.locale.Locale
+import com.aldebaran.qi.sdk.`object`.locale.Region
+import com.aldebaran.qi.sdk.builder.ListenBuilder
+import com.aldebaran.qi.sdk.builder.PhraseSetBuilder
+import com.aldebaran.qi.sdk.builder.SayBuilder
+import com.aldebaran.qi.sdk.builder.TopicBuilder
+import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
-import com.softbankrobotics.qisdktutorials.ui.tutorials.gettingstarted.HelloHumanTutorialActivity;
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
+        private val qiChatbot: QiChatbot? = null
+        // Store the Chat action.
+        private val chat: Chat? = null
         private var total=500
         private const val TAG = "MainActivity"
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private const val KEY_MESSAGE = "key_message"
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        QiSDK.register(this, this)
         setContentView(R.layout.activity_main)
         mainLayout.contador.setText(""+total)
         mainLayout.scanButton.setOnClickListener {
-            val launchIntent2 = Intent(this, HelloHumanTutorialActivity::class.java)
-            startActivity(launchIntent2)
 
-//            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-//            //val launchIntent = Intent(this, MainActivity::class.java)
-//            //startActivity(launchIntent)
-//            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            //val launchIntent = Intent(this, MainActivity::class.java)
+            //startActivity(launchIntent)
+            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
         }
 
         mainLayout.cancelButton.setOnClickListener{
@@ -47,6 +61,50 @@ class MainActivity : AppCompatActivity() {
             startActivity(launchIntent)
         }
     }
+    override fun onRobotFocusGained(qiContext: QiContext) {
+        val locale: Locale = Locale(Language.SPANISH, Region.SPAIN)
+
+        val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
+            .withLocale(locale)
+            .withText("Bienvenido a Cashbot! Selecciona una opción") // Set the text to say.
+            .build() // Build the say action.
+        say.run()
+        val phraseSetOptions = PhraseSetBuilder.with(qiContext) // Create the builder using the QiContext.
+            .withTexts("Escanear","Pagar","Cancelar") // Add the phrases Pepper will listen to.
+            .build() // Build the PhraseSet.
+        val listen = ListenBuilder.with(qiContext) // Create the builder with the QiContext.
+            .withLocale(locale)
+            .withPhraseSets(phraseSetOptions) // Set the PhraseSets to listen to.
+            .build() // Build the listen action.
+        val listenResult = listen.run()
+
+        val humanText = listenResult.heardPhrase.text
+        Log.i(TAG, "Heard phrase: $humanText")
+        if(humanText=="Escanear"){
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            //val launchIntent = Intent(this, MainActivity::class.java)
+            //startActivity(launchIntent)
+            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+        }
+        else if(humanText=="Cancelar"){
+            total=0
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
+        }
+    }
+
+    override fun onRobotFocusLost() {
+        // The robot focus is lost.
+    }
+    override fun onDestroy() {
+        // Unregister the RobotLifecycleCallbacks for this Activity.
+        QiSDK.unregister(this, this)
+        super.onDestroy()
+    }
+    override fun onRobotFocusRefused(reason: String) {
+        // The robot focus is refused.
+    }
+
 
     override fun onStart() {
         super.onStart()
