@@ -7,12 +7,20 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.aldebaran.qi.sdk.QiContext
+import com.aldebaran.qi.sdk.QiSDK
+import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
+import com.aldebaran.qi.sdk.`object`.conversation.Say
+import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
+import kotlinx.android.synthetic.main.activity_result.textViewResult
 import kotlinx.android.synthetic.main.activity_result.view.*
+import kotlinx.android.synthetic.main.transaccion.*
+import kotlinx.android.synthetic.main.transaccion.view.*
 
-class TransactionActivity : AppCompatActivity() {
+class TransactionActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
         private const val KEY_MESSAGE = "key_message"
@@ -23,7 +31,9 @@ class TransactionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        QiSDK.register(this, this)
         setContentView(R.layout.transaccion)
+        transactionLayout.scanAgainButton.setVisibility(View.GONE);
         val mensajeVuelto = intent.getStringExtra(KEY_MESSAGE)
         textViewResult.text = mensajeVuelto
     }
@@ -36,7 +46,29 @@ class TransactionActivity : AppCompatActivity() {
             finish()
         }, RESTART_TIME)
     }
-
+    override fun onRobotFocusGained(qiContext: QiContext) {
+        val mensajeVuelto = intent.getStringExtra(KEY_MESSAGE)
+        speak(mensajeVuelto,qiContext)
+    }
+    override fun onRobotFocusLost() {
+        // The robot focus is lost.
+    }
+    override fun onDestroy() {
+        // Unregister the RobotLifecycleCallbacks for this Activity.
+        QiSDK.unregister(this, this)
+        super.onDestroy()
+    }
+    override fun onRobotFocusRefused(reason: String) {
+        // The robot focus is refused.
+    }
+        //Clean code papá, copiando metodo de otra clase
+    fun speak(phrase:String,qiContext: QiContext) {
+        val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
+            .withLocale(MainActivity.locale)
+            .withText(phrase) // Set the text to say.
+            .build() // Build the say action.
+        say.run()
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

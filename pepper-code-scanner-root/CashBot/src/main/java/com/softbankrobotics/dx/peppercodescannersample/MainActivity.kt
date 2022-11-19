@@ -27,15 +27,15 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
-        private val qiChatbot: QiChatbot? = null
         // Store the Chat action.
-        private val chat: Chat? = null
-        private var total=500
+        val locale: Locale = Locale(Language.SPANISH, Region.SPAIN)
+        private var total=0
         private const val TAG = "MainActivity"
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private const val KEY_MESSAGE = "key_message"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
+        total=500
         super.onCreate(savedInstanceState)
         QiSDK.register(this, this)
         setContentView(R.layout.activity_main)
@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         }
     }
     override fun onRobotFocusGained(qiContext: QiContext) {
-        val locale: Locale = Locale(Language.SPANISH, Region.SPAIN)
 
         val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
             .withLocale(locale)
@@ -80,19 +79,34 @@ class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
         val humanText = listenResult.heardPhrase.text
         Log.i(TAG, "Heard phrase: $humanText")
-        if(humanText=="Escanear"){
+        makeDecision(humanText,qiContext)
+    }
+    fun speak(phrase:String,qiContext: QiContext ){
+        val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
+            .withLocale(locale)
+            .withText(phrase) // Set the text to say.
+            .build() // Build the say action.
+        say.run()
+    }
+    fun makeDecision(heardPhrase:String, qiContext: QiContext){
+        if(heardPhrase=="Escanear"){
+            speak("Por favor escanea un código",qiContext)
             val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            //val launchIntent = Intent(this, MainActivity::class.java)
-            //startActivity(launchIntent)
             startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
         }
-        else if(humanText=="Cancelar"){
+        else if(heardPhrase=="Cancelar"){
+            speak("Tu orden ha sido cancelada",qiContext)
             total=0
             val launchIntent = Intent(this, MainActivity::class.java)
             startActivity(launchIntent)
         }
+        else if(heardPhrase=="Pagar"){
+            val message = ""+total
+            val launchIntent = Intent(this, ResultActivity::class.java)
+            launchIntent.putExtra(KEY_MESSAGE, message)
+            startActivity(launchIntent)
+        }
     }
-
     override fun onRobotFocusLost() {
         // The robot focus is lost.
     }

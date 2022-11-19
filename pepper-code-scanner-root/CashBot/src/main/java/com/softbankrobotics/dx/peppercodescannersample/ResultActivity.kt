@@ -7,13 +7,23 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.aldebaran.qi.sdk.QiContext
+import com.aldebaran.qi.sdk.QiSDK
+import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
+import com.aldebaran.qi.sdk.`object`.conversation.Say
+import com.aldebaran.qi.sdk.`object`.locale.Language
+import com.aldebaran.qi.sdk.`object`.locale.Locale
+import com.aldebaran.qi.sdk.`object`.locale.Region
+import com.aldebaran.qi.sdk.builder.ListenBuilder
+import com.aldebaran.qi.sdk.builder.PhraseSetBuilder
+import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.google.android.gms.vision.barcode.Barcode
 import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_result.view.*
 import java.lang.Math.abs
 
-class ResultActivity : AppCompatActivity() {
+class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
         private const val KEY_MESSAGE = "key_message"
@@ -25,6 +35,7 @@ class ResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        QiSDK.register(this, this)
         setContentView(R.layout.activity_result)
         val message = intent.getStringExtra(KEY_MESSAGE)
         precioPagar = message.toInt()
@@ -36,16 +47,52 @@ class ResultActivity : AppCompatActivity() {
         resultLayout.confirmPayButton.setOnClickListener{
             val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
             startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
-
-           // var scannedPrice= "2000"
-           // Log.d("Precio escaneado",scannedPrice)
-          //  var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar)
-          //  val launchIntent = Intent(this, TransactionActivity::class.java)
-           // launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
-          //  startActivity(launchIntent)
+//
+//            val launchIntent = Intent(this, TransactionActivity::class.java)
+//            launchIntent.putExtra(KEY_MESSAGE, "Tu vuelto blah blah")
+//            startActivity(launchIntent)
         }
     }
-
+    //Clean code papá, copiando metodo de otra clase
+    fun speak(phrase:String,qiContext: QiContext ) {
+        val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
+            .withLocale(MainActivity.locale)
+            .withText(phrase) // Set the text to say.
+            .build() // Build the say action.
+        say.run()
+    }
+    override fun onRobotFocusGained(qiContext: QiContext) {
+        speak("Tu precio a pagar corresponde a "+ precioPagar,qiContext)
+        speak("Quieres proceder con el pago?",qiContext)
+        val phraseSetBooleano = PhraseSetBuilder.with(qiContext) // Create the builder using the QiContext.
+            .withTexts("Sí","No") // Add the phrases Pepper will listen to.
+            .build() // Build the PhraseSet.
+        val listen = ListenBuilder.with(qiContext) // Create the builder with the QiContext.
+            .withLocale(MainActivity.locale)
+            .withPhraseSets(phraseSetBooleano) // Set the PhraseSets to listen to.
+            .build() // Build the listen action.
+        val listenResult = listen.run()
+        val humanText = listenResult.heardPhrase.text
+        if(humanText=="Sí"){
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+        }
+        else if(humanText=="No"){
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
+        }
+    }
+    override fun onRobotFocusLost() {
+        // The robot focus is lost.
+    }
+    override fun onDestroy() {
+        // Unregister the RobotLifecycleCallbacks for this Activity.
+        QiSDK.unregister(this, this)
+        super.onDestroy()
+    }
+    override fun onRobotFocusRefused(reason: String) {
+        // The robot focus is refused.
+    }
     override fun onStart() {
         super.onStart()
         hideSystemUI()
