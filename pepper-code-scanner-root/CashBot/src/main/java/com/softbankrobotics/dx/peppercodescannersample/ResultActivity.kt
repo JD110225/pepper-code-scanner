@@ -27,10 +27,11 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
         private const val KEY_MESSAGE = "key_message"
+        private const val PRECIO_ORIGINAL = "precio_original"
         private const val TAG = "ResultActivity"
         private const val RESTART_TIME = 10000L
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
-        private var precioPagar:Int = 0
+        private var precioPagar:String=""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,19 +39,22 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         QiSDK.register(this, this)
         setContentView(R.layout.activity_result)
         val message = intent.getStringExtra(KEY_MESSAGE)
-        precioPagar = message.toInt()
+        precioPagar = message
         textViewResult.text = "Tu precio a pagar es: "+message
         resultLayout.backButton.setOnClickListener{
             val launchIntent = Intent(this, MainActivity::class.java)
             startActivity(launchIntent)
         }
         resultLayout.confirmPayButton.setOnClickListener{
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+//            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+//            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
 //
-//            val launchIntent = Intent(this, TransactionActivity::class.java)
-//            launchIntent.putExtra(KEY_MESSAGE, "Tu vuelto blah blah")
-//            startActivity(launchIntent)
+            val msg=generarMensajeVuelto(1000)
+            val launchIntent = Intent(this, TransactionActivity::class.java)
+            launchIntent.putExtra(KEY_MESSAGE, msg)
+            launchIntent.putExtra(PRECIO_ORIGINAL, message)
+
+            startActivity(launchIntent)
         }
     }
     //Clean code papá, copiando metodo de otra clase
@@ -115,7 +119,7 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
             var scannedPrice= barcode?.rawValue
             Log.d("Precio escaneado",scannedPrice)
-            var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar)
+            var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar.toInt())
             val launchIntent = Intent(this, TransactionActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
             startActivity(launchIntent)

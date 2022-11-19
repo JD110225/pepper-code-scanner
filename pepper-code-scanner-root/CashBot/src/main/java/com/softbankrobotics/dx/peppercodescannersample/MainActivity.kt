@@ -29,13 +29,12 @@ class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
     companion object {
         // Store the Chat action.
         val locale: Locale = Locale(Language.SPANISH, Region.SPAIN)
-        private var total=0
+        private var total=500
         private const val TAG = "MainActivity"
-        private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
+        const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private const val KEY_MESSAGE = "key_message"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        total=500
         super.onCreate(savedInstanceState)
         QiSDK.register(this, this)
         setContentView(R.layout.activity_main)
