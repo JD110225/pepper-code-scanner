@@ -39,14 +39,19 @@ class TransactionActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         val mensajeVuelto = intent.getStringExtra(KEY_MESSAGE)
         val precioOriginal = intent.getStringExtra(PRECIO_ORIGINAL)
         Log.i("Mensaje Vuelto: ",mensajeVuelto.substring(0,16))
-        Log.i("Precio Original: ",precioOriginal)
+//        Log.i("Precio Original: ",precioOriginal)
         if(mensajeVuelto.substring(0,16)=="Aún debes pagar "){
             scanAgainButton.setVisibility(View.VISIBLE)
         }
         transactionLayout.scanAgainButton.setOnClickListener{
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            startActivityForResult(launchIntent, MainActivity.BARCODE_READER_ACTIVITY_REQUEST)
+//            val launchIntent = Intent(this, ResultActivity::class.java)
+//            launchIntent.putExtra(KEY_MESSAGE, precioOriginal)
+//            startActivity(launchIntent)
         }
+        Thread.sleep(2000);
+        MainActivity.resetTotal()
+        val launchIntent = Intent(this, MainActivity::class.java)
+        startActivity(launchIntent)
         textViewResult.text = mensajeVuelto
     }
 

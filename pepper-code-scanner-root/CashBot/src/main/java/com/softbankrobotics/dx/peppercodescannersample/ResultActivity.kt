@@ -22,7 +22,7 @@ import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_result.view.*
 import java.lang.Math.abs
-
+import com.softbankrobotics.dx.peppercodescannersample.MainActivity
 class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
@@ -46,15 +46,15 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
             startActivity(launchIntent)
         }
         resultLayout.confirmPayButton.setOnClickListener{
-//            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-//            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
 //
-            val msg=generarMensajeVuelto(1000)
-            val launchIntent = Intent(this, TransactionActivity::class.java)
-            launchIntent.putExtra(KEY_MESSAGE, msg)
-            launchIntent.putExtra(PRECIO_ORIGINAL, message)
-
-            startActivity(launchIntent)
+//            val msg=generarMensajeVuelto(1000)
+//            val launchIntent = Intent(this, TransactionActivity::class.java)
+//            launchIntent.putExtra(KEY_MESSAGE, msg)
+//            launchIntent.putExtra(PRECIO_ORIGINAL, message)
+//
+//            startActivity(launchIntent)
         }
     }
     //Clean code papá, copiando metodo de otra clase
@@ -66,25 +66,25 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         say.run()
     }
     override fun onRobotFocusGained(qiContext: QiContext) {
-        speak("Tu precio a pagar corresponde a "+ precioPagar,qiContext)
-        speak("Quieres proceder con el pago?",qiContext)
-        val phraseSetBooleano = PhraseSetBuilder.with(qiContext) // Create the builder using the QiContext.
-            .withTexts("Sí","No") // Add the phrases Pepper will listen to.
-            .build() // Build the PhraseSet.
-        val listen = ListenBuilder.with(qiContext) // Create the builder with the QiContext.
-            .withLocale(MainActivity.locale)
-            .withPhraseSets(phraseSetBooleano) // Set the PhraseSets to listen to.
-            .build() // Build the listen action.
-        val listenResult = listen.run()
-        val humanText = listenResult.heardPhrase.text
-        if(humanText=="Sí"){
-            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
-            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
-        }
-        else if(humanText=="No"){
-            val launchIntent = Intent(this, MainActivity::class.java)
-            startActivity(launchIntent)
-        }
+        speak("Tu precio a pagar corresponde a "+ precioPagar+"Quieres proceder con el pago?",qiContext)
+//        speak("Quieres proceder con el pago?",qiContext)
+//        val phraseSetBooleano = PhraseSetBuilder.with(qiContext) // Create the builder using the QiContext.
+//            .withTexts("Sí","No") // Add the phrases Pepper will listen to.
+//            .build() // Build the PhraseSet.
+//        val listen = ListenBuilder.with(qiContext) // Create the builder with the QiContext.
+//            .withLocale(MainActivity.locale)
+//            .withPhraseSets(phraseSetBooleano) // Set the PhraseSets to listen to.
+//            .build() // Build the listen action.
+//        val listenResult = listen.run()
+//        val humanText = listenResult.heardPhrase.text
+//        if(humanText=="Si"){
+//            val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
+//            startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
+//        }
+//        else if(humanText=="No"){
+//            val launchIntent = Intent(this, MainActivity::class.java)
+//            startActivity(launchIntent)
+//        }
     }
     override fun onRobotFocusLost() {
         // The robot focus is lost.
@@ -118,8 +118,10 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
             val barcode: Barcode? =
                 data.getParcelableExtra(BarcodeReaderActivity.KEY_CAPTURED_BARCODE)
             var scannedPrice= barcode?.rawValue
-            Log.d("Precio escaneado",scannedPrice)
+            Log.i("Precio escaneado",scannedPrice)
             var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar.toInt())
+            Log.i("Vuelto: ",mensajeVuelto)
+            MainActivity.resetTotal()
             val launchIntent = Intent(this, TransactionActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
             startActivity(launchIntent)
