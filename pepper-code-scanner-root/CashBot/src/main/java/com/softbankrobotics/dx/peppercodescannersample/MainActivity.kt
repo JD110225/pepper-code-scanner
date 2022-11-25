@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         fun resetTotal() {
             total=0
         }
-
         // Store the Chat action.
         val locale: Locale = Locale(Language.SPANISH, Region.SPAIN)
         var total=0

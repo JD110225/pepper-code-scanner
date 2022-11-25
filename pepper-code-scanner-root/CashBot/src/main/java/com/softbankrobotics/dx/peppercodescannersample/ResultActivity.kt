@@ -22,7 +22,6 @@ import com.softbankrobotics.dx.peppercodescanner.BarcodeReaderActivity
 import kotlinx.android.synthetic.main.activity_result.*
 import kotlinx.android.synthetic.main.activity_result.view.*
 import java.lang.Math.abs
-import com.softbankrobotics.dx.peppercodescannersample.MainActivity
 class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
 
     companion object {
@@ -38,9 +37,8 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         super.onCreate(savedInstanceState)
         QiSDK.register(this, this)
         setContentView(R.layout.activity_result)
-        val message = intent.getStringExtra(KEY_MESSAGE)
-        precioPagar = message
-        textViewResult.text = "Tu precio a pagar es: "+message
+        precioPagar = intent.getStringExtra(KEY_MESSAGE)
+        textViewResult.text = "Tu precio a pagar es: "+precioPagar
         resultLayout.backButton.setOnClickListener{
             val launchIntent = Intent(this, MainActivity::class.java)
             startActivity(launchIntent)
@@ -48,16 +46,15 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         resultLayout.confirmPayButton.setOnClickListener{
             val launchIntent = Intent(this, BarcodeReaderActivity::class.java)
             startActivityForResult(launchIntent, BARCODE_READER_ACTIVITY_REQUEST)
-//
-//            val msg=generarMensajeVuelto(1000)
+
+//            val msg=generarMensajeVuelto(-500)
 //            val launchIntent = Intent(this, TransactionActivity::class.java)
 //            launchIntent.putExtra(KEY_MESSAGE, msg)
-//            launchIntent.putExtra(PRECIO_ORIGINAL, message)
+//            launchIntent.putExtra(PRECIO_ORIGINAL, precioPagar)
 //
 //            startActivity(launchIntent)
         }
     }
-    //Clean code papá, copiando metodo de otra clase
     fun speak(phrase:String,qiContext: QiContext ) {
         val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
             .withLocale(MainActivity.locale)
@@ -121,9 +118,9 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
             Log.i("Precio escaneado",scannedPrice)
             var mensajeVuelto:String = generarMensajeVuelto((scannedPrice?.toInt() ?: -1) - precioPagar.toInt())
             Log.i("Vuelto: ",mensajeVuelto)
-            MainActivity.resetTotal()
             val launchIntent = Intent(this, TransactionActivity::class.java)
             launchIntent.putExtra(KEY_MESSAGE, mensajeVuelto)
+            launchIntent.putExtra(PRECIO_ORIGINAL, precioPagar)
             startActivity(launchIntent)
         }
     }

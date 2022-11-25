@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
@@ -39,20 +40,19 @@ class TransactionActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         val mensajeVuelto = intent.getStringExtra(KEY_MESSAGE)
         val precioOriginal = intent.getStringExtra(PRECIO_ORIGINAL)
         Log.i("Mensaje Vuelto: ",mensajeVuelto.substring(0,16))
-//        Log.i("Precio Original: ",precioOriginal)
+        Log.i("Precio Original: ",precioOriginal)
         if(mensajeVuelto.substring(0,16)=="Aún debes pagar "){
             scanAgainButton.setVisibility(View.VISIBLE)
         }
         transactionLayout.scanAgainButton.setOnClickListener{
-//            val launchIntent = Intent(this, ResultActivity::class.java)
-//            launchIntent.putExtra(KEY_MESSAGE, precioOriginal)
-//            startActivity(launchIntent)
+            val launchIntent = Intent(this, ResultActivity::class.java)
+            launchIntent.putExtra(KEY_MESSAGE, precioOriginal)
+            startActivity(launchIntent)
         }
-        Thread.sleep(2000);
-        MainActivity.resetTotal()
-        val launchIntent = Intent(this, MainActivity::class.java)
-        startActivity(launchIntent)
+
         textViewResult.text = mensajeVuelto
+//        val launchIntent = Intent(this, MainActivity::class.java)
+//        startActivity(launchIntent)
     }
 
     override fun onStart() {
@@ -60,6 +60,11 @@ class TransactionActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         hideSystemUI()
 
         Handler().postDelayed({
+            if(!transactionLayout.scanAgainButton.isVisible){
+                MainActivity.resetTotal()
+            }
+            val launchIntent = Intent(this, MainActivity::class.java)
+            startActivity(launchIntent)
             finish()
         }, RESTART_TIME)
     }
@@ -78,7 +83,6 @@ class TransactionActivity : AppCompatActivity(), RobotLifecycleCallbacks {
     override fun onRobotFocusRefused(reason: String) {
         // The robot focus is refused.
     }
-        //Clean code papá, copiando metodo de otra clase
     fun speak(phrase:String,qiContext: QiContext) {
         val say: Say = SayBuilder.with(qiContext) // Create the builder with the context.
             .withLocale(MainActivity.locale)
