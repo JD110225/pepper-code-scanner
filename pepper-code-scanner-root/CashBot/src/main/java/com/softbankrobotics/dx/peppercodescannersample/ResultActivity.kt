@@ -28,7 +28,7 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         private const val KEY_MESSAGE = "key_message"
         private const val PRECIO_ORIGINAL = "precio_original"
         private const val TAG = "ResultActivity"
-        private const val RESTART_TIME = 10000L
+        private const val RESTART_TIME = 30000L
         private const val BARCODE_READER_ACTIVITY_REQUEST = 1208
         private var precioPagar:String=""
     }
@@ -98,9 +98,9 @@ class ResultActivity : AppCompatActivity(), RobotLifecycleCallbacks {
         super.onStart()
         hideSystemUI()
 
-        Handler().postDelayed({
-            finish()
-        }, RESTART_TIME)
+//        Handler().postDelayed({
+//            finish()
+//        }, RESTART_TIME)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
